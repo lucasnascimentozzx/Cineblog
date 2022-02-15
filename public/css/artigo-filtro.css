@@ -1,0 +1,72 @@
+h1{
+    position: relative;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: .9em;
+}
+h1 span{
+    font-size: 0.4em;
+    font-weight: normal;
+    color: rgb(0,0,0,.68);
+}
+.artigos-results-wrapper{
+    display: flex;
+    flex-direction: column;
+    padding: 0 4em;
+}
+
+.artigo-result-item{
+    display: flex;
+    padding:  1em;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.artigo-result-item:hover{
+    background: rgb(235,235,235);
+    background: linear-gradient(90deg, rgba(235,235,235,1) 0%, rgba(235,235,235,0) 100%);
+}
+
+
+.artigo-result-item .artigo-title{
+
+}
+.artigo-result-item .artigo-image{
+    width: 100px;
+    height: 100px;
+
+}
+.artigo-result-item .artigo-image img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+.artigo-result-item .artigo-descricao{
+
+}
+
+.artigo-result-item .artigo-description-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+}
+.artigo-result-item .artigo-description-container p{
+    display: flex;
+    align-items: center;
+    margin: 0;
+    height:50%;
+    margin-left: 1rem;
+}
+.artigo-result-item .artigo-description-container p:first-of-type{
+    font-size: 1.3em;
+    color: rgb(0,0,0,.87);
+}
+.artigo-result-item .artigo-description-container p:last-of-type{
+    color: rgb(0,0,0,.78);
+    font-size: 0.9em;
+    align-items: flex-start
+
+}

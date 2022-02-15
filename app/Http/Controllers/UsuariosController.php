@@ -11,57 +11,68 @@ class UsuariosController extends Controller
 {
     public function index()
     {
-        $usuarios = Usuario::orderBy('id', 'asc')->get();
 
-        return view('usuarios.index', ['usuarios' => $usuarios, 'pagina' => 'usuarios']);
+        return view('admin.usuarios')->with(['usuarios' => Usuario::all()]);
     }
 
-    public function create()
+    public function show($id)
     {
-        return view('usuarios.create', ['pagina' => 'usuarios']);
+        return view('admin.usuarios-show')->with(['usuario' => Usuario::findOrFail($id)]);
+
     }
+    public function update(Request $request, $id){
 
-    public function insert(Request $form)
-    {
-        $usuario = new Usuario();
+        $usuario = Usuario::findOrFail($id);
 
-        $usuario->name = $form->nome;
-        $usuario->email = $form->email;
-        $usuario->username = $form->usuario;
-        $usuario->password = Hash::make($form->senha);
+        $usuario->admin = !!$request->admin;
 
         $usuario->save();
 
-        return redirect()->route('usuarios.index');
+        return redirect()->route('admin-usuarios.index');
+    }
+
+    public function destroy($id){
+        $usuario = Usuario::findOrFail($id);
+        if($usuario->admin){
+            $admin_count = Usuario::admin()->count();
+            if ($admin_count - 1 == 0) {
+                return redirect()->back();
+            }
+        }
+        $usuario->delete();
+        return redirect()->back();
+    }
+
+    public function insert(Request $request, Usuario $usuario)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email'  => 'required|email|unique:usuarios', 
+            'username' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+        $usuario->fill($request->all());
+        $usuario->password = $request->password;
+        $usuario->save();
+
+        return redirect()->route('login')->withInput(['username' => $usuario->username]);
     }
 
     // Ações de login
     public function login(Request $form)
     {
-        // Está enviando o formulário
-        if ($form->isMethod('POST'))
-        {
-            // Se um dos campos não for preenchidos, nem tenta o login e volta
-            // para a página anterior
-            $credenciais = $form->validate([
-                'username' => ['required'],
-                'password' => ['required'],
-            ]);
-            
-            // Tenta o login
-            if (Auth::attempt($credenciais))
-            {
-                session()->regenerate();
-                return redirect()->route('home');
-            }
-            else
-            {
-                // Login deu errado (usuário ou senha inválidos)
-                return redirect()->route('login')->with('erro', 'Usuário ou senha inválidos.');
-            }
-        }
 
-        return view('usuarios.login');
+        $credenciais = $form->validate([
+            'username' => ['required'],
+            'password' => ['required'],
+        ]);
+        
+        if (!Auth::attempt($credenciais)){
+            return redirect()->route('login')->withErrors(['password'=> 'Usuário ou senha inválidos.','username' => 'Usuário ou senha inválidos.']);
+        }
+        
+        session()->regenerate();
+        return redirect()->route('home');
     }
 
     public function logout()

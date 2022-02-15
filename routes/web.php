@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\ArtigoController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,36 +17,73 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home', ['pagina' => 'home']);
-})->name('home');
+Route::middleware(['middleware' => 'auth'])->group(function () {
+    Route::get('/', [ArtigoController::class, 'index'])->name('home');
 
-Route::get('produtos', [ProdutosController::class, 'index'])->name('produtos');
+    Route::get('/logout', [UsuariosController::class, 'logout'])->name('logout');
+    Route::view('publicar', 'publicar')->name('publicar');
+    Route::post('publicar', [ArtigoController::class, 'publicar'])->name('publicar');
 
-Route::get('/produtos/inserir', [ProdutosController::class, 'create'])->name('produtos.inserir');
+    Route::post('comentar/{id}', [ArtigoController::class, 'comentar'])->name('comentar');
+    Route::get('like/{id}', [ArtigoController::class, 'like'])->name('like');
+});
 
-Route::post('/produtos/inserir', [ProdutosController::class, 'insert'])->name('produtos.gravar');
 
-Route::get('/produtos/{prod}', [ProdutosController::class, 'show'])->name('produtos.show');
+Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function(){
+    Route::view('/', 'admin.home')->name('admin-home');
 
-Route::get('/produtos/{prod}/editar', [ProdutosController::class, 'edit'])->name('produtos.edit');
 
-Route::put('/produtos/{prod}/editar', [ProdutosController::class, 'update'])->name('produtos.update');
+    Route::group([
+        'prefix' => 'categorias',
+        'controller' => CategoriasController::class,
+        'as' => 'admin-categorias.'
+    ],function(){
 
-Route::get('/produtos/{prod}/apagar', [ProdutosController::class, 'remove'])->name('produtos.remove');
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}', 'show')->name('show');
+        Route::post('/{id}', 'update');
+        Route::get('/delete/{id}', 'destroy')->name('delete');
+    });
 
-Route::delete('/produtos/{prod}/apagar', [ProdutosController::class, 'delete'])->name('produtos.delete');
 
-Route::get('usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
 
-Route::prefix('usuarios')->group(function() {
-    
-    Route::get('/inserir', [UsuariosController::class, 'create'])->name('usuarios.inserir');
-    Route::post('/inserir', [UsuariosController::class, 'insert'])->name('usuarios.gravar');
+    Route::group([
+        'prefix' => 'usuarios',
+        'controller' => UsuariosController::class,
+        'as' => 'admin-usuarios.'
+    ],function(){
+
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'show')->name('show');
+        Route::post('/{id}', 'update');
+        Route::get('/delete/{id}', 'destroy')->name('delete');
+        
+    });
+
+
+    Route::group([
+        'prefix' => 'publicacoes',
+        'controller' => ArtigoController::class,
+        'as' => 'admin-publicacoes.'
+    ],function(){
+
+        Route::get('/', 'publicacoes')->name('index');
+        
+        Route::get('/delete/{id}', 'destroy')->name('delete');
+        
+    });
 
 });
 
-Route::get('/login', [UsuariosController::class, 'login'])->name('login');
-Route::post('/login', [UsuariosController::class, 'login']);
 
-Route::get('/logout', [UsuariosController::class, 'logout'])->name('logout');
+
+Route::post('/login', [UsuariosController::class, 'login']);
+Route::view('login', 'login')->name('login');
+
+Route::post('register', [UsuariosController::class, 'insert']);
+Route::view('register', 'register')->name('register');
+
+Route::get('/post/{id}', [ArtigoController::class, 'show'])->name('view');
+
+Route::get('/categoria/{name}', [ArtigoController::class, 'categoria'])->name('categoria');

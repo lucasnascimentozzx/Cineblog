@@ -1,0 +1,213 @@
+body{
+    margin: 0;
+}
+*{
+    box-sizing: border-box;
+    font-family: Roboto;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+}
+.nav-logo img{
+    height: 80px;
+}
+.nav-logo{
+    justify-self: flex-start
+}
+.nav-itens{
+    display:flex;
+    gap: 2em;
+    width: 100%;
+    padding: 0 2em;
+    list-style: none;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.nav-itens a{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+}
+.nav-menus{
+    display:flex;
+    gap: 1em;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1em;
+    position: relative;
+}
+.nav-search{
+    background:white;
+    display:flex;
+    align-items: center;
+    position: relative;
+    border-radius: 20px;
+    height:30px;
+    align-self: center;
+
+}
+.nav-search input:focus{
+    outline: 0px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.nav-search input{
+    border:0;
+    height:100%;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.719);
+    border-left: 0;
+    height:2.1em;
+    background: none;
+    width: 350px;
+    z-index: 3;
+    background:white;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+#outside_click_capture_overlay{
+    position:absolute;
+    height:100%;
+    width:100%;
+    top:0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#outside_click_capture_overlay[active]{
+    pointer-events: all
+}
+
+#resultados{
+    position: absolute;
+    width: 100%;
+    top: 1em;
+    display	:flex;
+    flex-direction: column;
+    padding-top: 1.5em;
+    background:rgb(253, 253, 253);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    z-index: 2;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+
+}
+#resultados:empty{
+    display: none;
+}
+#resultados a{
+    display	:flex;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+    padding: 10px;
+    color: rgba(0, 0, 0, 0.726);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+#resultados a:hover{
+    background:rgb(235, 235, 235);
+}
+
+#resultados span{
+    display: flex;
+    width: calc(100% - 35px);
+    height:1em;
+    line-height: 1em;
+    font-size: 0.8em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#resultados .image-wrapper{
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+#resultados img{
+    object-fit: cover;
+    width: 100%;
+    border-radius: 50%;
+
+    height: 100%;
+}
+.nav-search .icon{
+    cursor: pointer;
+    padding: 0.5em 1em;
+    z-index: 3;
+    height:2.1em;
+    border: 1px solid rgba(0, 0, 0, 0.719);
+    border-right: 0;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    background:white
+}
+.nav-search .icon:hover{
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    background:rgb(247, 247, 247);
+}
+
+.nav-login{
+    height: 100%;
+    display: flex;
+    cursor: pointer;
+    align-items: center
+}
+.nav-login a {
+    color: black;
+    text-decoration: none;
+}
+
+
+
+.admin-tools{
+    list-style: none;
+    position: absolute;
+    left: 0;
+    top: 20%;
+    min-width: 15%;
+    width: max-content;
+    padding: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    --border: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+}
+.admin-tools p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em;
+    padding-bottom: 0;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.admin-tools li{
+    border-bottom: var(--border);
+    font-size: 0.9em;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+}
+.admin-tools li:last-of-type{
+    border-bottom: 0;
+}
+.admin-tools li:hover{
+    background-color: rgb(235, 235, 235);
+}
+.admin-tools li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    padding: 1em;
+}

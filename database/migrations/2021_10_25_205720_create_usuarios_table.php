@@ -19,6 +19,7 @@ class CreateUsuariosTable extends Migration
             $table->string('email', 255);
             $table->string('username', 255);
             $table->string('password', 255);
+            $table->string('api_token', 80)->unique();
             $table->boolean('admin')->default(0);
         });
     }
